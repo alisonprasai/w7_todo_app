@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import todoModel from "../models/todo.model";
 
-const deleteToDo = async (req: Request, res: Response) => {
+const getTodoById = async (req: Request, res: Response) => {
   try {
-    console.log("deletetoidiohere")
     const todoId = Number(req.params.id);
 
     if (Number.isNaN(todoId)) {
@@ -12,11 +11,9 @@ const deleteToDo = async (req: Request, res: Response) => {
       });
     }
 
-    const deleteResult = await todoModel.deleteOne({
-      id: todoId, // 🔥 use numeric id
-    });
+    const todo = await todoModel.findOne({ id: todoId });
 
-    if (deleteResult.deletedCount === 0) {
+    if (!todo) {
       return res.status(404).json({
         message: "Todo not found.",
       });
@@ -24,7 +21,7 @@ const deleteToDo = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       status: "success",
-      message: "Todo deleted successfully.",
+      data: todo,
     });
   } catch (error: any) {
     return res.status(500).json({
@@ -34,4 +31,4 @@ const deleteToDo = async (req: Request, res: Response) => {
   }
 };
 
-export default deleteToDo;
+export default getTodoById;

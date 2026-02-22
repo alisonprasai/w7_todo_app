@@ -1,14 +1,48 @@
 import mongoose from "mongoose";
 
-const todoSchema = new mongoose.Schema({
-  todo_task: {
-    type: String,
-  },
+const todoSchema = new mongoose.Schema(
+  {
+    id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
 
-  completed: {
-    type: Boolean,
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    description: {
+      type: String,
+      default: "",
+    },
+
+    completed: {
+      type: Boolean,
+      default: false,
+    },
+
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
+
+    dueDate: {
+      type: Date,
+    },
+
+    category: {
+      type: String,
+      default: "general",
+    },
   },
-});
+  {
+    timestamps: true, // adds createdAt and updatedAt automatically
+  },
+);
 
 const todoModel = mongoose.model("todos", todoSchema);
 
